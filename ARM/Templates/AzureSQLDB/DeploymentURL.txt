@@ -1,0 +1,1 @@
+https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgesbeckj%2FPowerShell563%2Fmaster%2FARM%2FTemplates%2FAzureSQLDB%2Ftemplate.json
