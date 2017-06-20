@@ -17,14 +17,15 @@ param(
 [String] $Path
 )
 
-Configuration DSCEnableRDP {
+Configuration EnableRDP {
 param(
 #ComputerName
 [string[]]$ComputerName="localhost"
 )
 
 Import-DscResource -Module xRemoteDesktopAdmin, xNetworking
-Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 1.1
+Import-DscResource -ModuleName xPSDesiredStateConfiguration
+
 Node $ComputerName
 {
         xRemoteDesktopAdmin RemoteDesktopSettings
@@ -40,6 +41,13 @@ Node $ComputerName
             Ensure = 'Present'
             Enabled = 'True'
         }
+        xServiceSet TermServ
+        {
+            Name = "TermService"
+            StartupType = "Automatic"
+            State = "Running"
+            Ensure = "Present"
+        }
 }
 }
-DSCEnableRDP -ComputerName $ComputerName -OutputPath $path
+EnableRDP -ComputerName $ComputerName -OutputPath $path
