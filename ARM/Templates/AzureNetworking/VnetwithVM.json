@@ -1,0 +1,103 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "",
+    "parameters": {  
+        "localGatewayName": {
+            "type": "string",
+            "defaultValue": "localGateway",
+            "metadata": {
+                "description": "Arbitrary name for gateway resource representing your local/on-prem gateway"
+            }
+        },
+        "localGatewayIpAddress": {
+            "type": "string",
+            "defaultValue": "128.104.224.244",
+            "metadata": {
+                "description": "Public IP of your local/on-prem gateway"
+            }
+        },
+        "localAddressPrefix": {
+            "type": "string",
+            "defaultValue": "192.168.1.0/24",
+            "metadata": {
+                "description": "CIDR block representing the address space of your local/on-prem network's Subnet"
+            }
+        },
+        "azureVNetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.0.0/16",
+            "metadata": {
+                "description": "CIDR block representing the address space of the Azure VNet"
+            }
+        },
+        "gatewaySubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.254.0/27",
+            "metadata": {
+                "description": "CIDR block for gateway subnet, subset of azureVNetAddressPrefix address space. Should be a /27 block"
+            }
+        },
+        "sharedKey": {
+            "type": "string",
+            "defaultValue": "@!VPNTunnel@!",
+            "metadata": {
+                "description": "Shared key (PSK) for IPSec tunnel"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "Subnet1",
+            "metadata": {
+                "description": "Arbitrary name for the Azure Subnet"
+            }
+        },
+        "subnetPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR block for VM subnet, subset of azureVNetAddressPrefix address space"
+            }
+        }
+    },
+    "variables": {  
+
+    },
+    "resources": [  
+        {
+            "apiVersion": "2017-05-10", 
+            "name": "VNet", 
+            "type": "Microsoft.Resources/deployments", 
+            "properties": { 
+                "mode": "incremental", 
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureNetworking/VNet.json",
+                    "contentVersion": "1.0.0.0"
+                }, 
+            "parameters": { 
+                "localGatewayName":{"value": "[parameters('localGatewayName')]"},
+                "localGatewayIpAddress":{"value": "[parameters('localGatewayIpAddress')]"},
+                "localAddressPrefix":{"value": "[parameters('localAddressPrefix')]"},
+                "azureVNetAddressPrefix":{"value": "[parameters('azureVNetAddressPrefix')]"},
+                "gatewaySubnetPrefix":{"value": "[parameters('gatewaySubnetPrefix')]"},
+                "sharedKey":{"value": "[parameters('sharedKey')]"}
+                } 
+            } 
+        },
+        {
+            "apiVersion": "2017-05-10", 
+            "name": "Subnet", 
+            "type": "Microsoft.Resources/deployments", 
+            "properties": { 
+                "mode": "incremental", 
+                "templateLink": {
+                    "uri": "https://github.com/gesbeckj/PowerShell563/blob/master/ARM/Templates/AzureNetworking/Subnet.json",
+                    "contentVersion": "1.0.0.0"
+                }, 
+            "parameters": { 
+                "subnetName":{"value": "[parameters('subnetName')]"},
+                "subnetPrefix":{"value": "[parameters('subnetPrefix')]"}
+                } 
+            } 
+        }
+    ],
+    "outputs": {  }
+}
