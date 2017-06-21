@@ -4,7 +4,7 @@
     "parameters": {  
         "subnetName": {
             "type": "string",
-            "defaultValue": "Subnet1",
+            "defaultValue": "azureSubnet",
             "metadata": {
                 "description": "Arbitrary name for the Azure Subnet"
             }

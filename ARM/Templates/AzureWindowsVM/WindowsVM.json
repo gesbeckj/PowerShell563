@@ -1,0 +1,210 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {  
+        "adminUsername": {
+        "type": "string",
+        "metadata": {
+            "description": "Username for the Virtual Machine."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+            "description": "Password for the Virtual Machine."
+            }
+        },
+        "windowsOSVersion": {
+            "type": "string",
+            "defaultValue": "2016-Datacenter",
+            "allowedValues": [
+                "2012-R2-Datacenter",
+                "2016-Datacenter-Core",
+                "2016-Datacenter"
+            ],
+        "metadata": {
+            "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+            }
+        },
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "Computer Name for the Virtual Machine."
+            },
+            "defaultValue": "serverName"
+        },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the subnet the computer should be place in."
+                },
+            "defaultValue": "azureSubnet"
+        },
+        "diskStorageTier": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Premium_LRS"
+            ],
+            "metadata": {
+                "description": "This is the storage tier for the data disks."
+            }
+        },
+        "diskCapacity": {
+            "type": "string",
+            "defaultValue": "32",
+            "allowedValues": [
+                "32",
+                "64",
+                "128",
+                "512",
+                "1024",
+                "2048",
+                "4096"
+            ],
+            "metadata": {
+                "description": "This is the size of each disk."
+            }
+        },
+        "numberOfDisks": {
+            "type": "string",
+            "defaultValue": "2",
+            "metadata": {
+                "description": "The number of disks to create"
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_DS1_v2",
+            "allowedValues":[
+                "Basic_A0",
+                "Basic_A1",
+                "Basic_A2",
+                "Basic_A3",
+                "Basic_A4",
+                "Standard_A0",
+                "Standard_A1",
+                "Standard_A10",
+                "Standard_A11",
+                "Standard_A2",
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_A5",
+                "Standard_A6",
+                "Standard_A7",
+                "Standard_A8",
+                "Standard_A9",
+                "Standard_D1",
+                "Standard_D1_v2",
+                "Standard_D11",
+                "Standard_D11_v2",
+                "Standard_D12",
+                "Standard_D12_v2",
+                "Standard_D13",
+                "Standard_D13_v2",
+                "Standard_D14",
+                "Standard_D14_v2",
+                "Standard_D15_v2",
+                "Standard_D2",
+                "Standard_D2_v2",
+                "Standard_D3",
+                "Standard_D3_v2",
+                "Standard_D4",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_DS1",
+                "Standard_DS1_v2",
+                "Standard_DS11",
+                "Standard_DS11_v2",
+                "Standard_DS12",
+                "Standard_DS12_v2",
+                "Standard_DS13",
+                "Standard_DS13_v2",
+                "Standard_DS14",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_DS2",
+                "Standard_DS2_v2",
+                "Standard_DS3",
+                "Standard_DS3_v2",
+                "Standard_DS4",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2"
+            ]
+        }
+    },
+    "variables": { 
+        "virtualNetworkName": "[concat('VNET-', uniqueString(resourceGroup().id))]",
+        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+        "imagePublisher": "MicrosoftWindowsServer",
+        "imageOffer": "WindowsServer",
+        "imageVersion": "latest",
+        "publicIPAddressType": "Dynamic",
+        "publicIPAddressName": "[concat(parameters('vmName'),'-IP-', uniqueString(resourceGroup().id))]",
+        "nicName": "[concat(parameters('vmName'),'-NIC')]",
+        "apiVersion": "2015-06-15"
+     },
+    "resources": [  
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('publicIPAddressName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+            }
+        },
+         {
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nicName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
+                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+                ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "[concat(parameters('vmName'),'-IP_Config')]",
+                        "properties": {
+                        "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                            },
+                        "subnet": {
+                            "id": "[variables('subnetRef')]"
+                        }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmname')]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2016-04-30-preview",
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "[variables('imagePublisher')]",
+                    "offer": "[variables('imageOffer')]",
+                    "sku": "[parameters('windowsOSVersion')]",
+                    "version": "[variables('imageVersion')]"
+                },
+                "osDisk": {
+                    "osType": "Windows",
+                    "caching": "ReadWrite",
+                    "createOption": "FromImage",
+                    "name": "OSDisk",
+                    "managedDisk": {
+                        "storageAccountType": "[parameters('diskStorageTier')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {  }
+}
