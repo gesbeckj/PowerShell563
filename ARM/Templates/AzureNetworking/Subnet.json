@@ -28,7 +28,7 @@
             "location": "[resourceGroup().location]",
             "properties": {
                 "addressPrefix": "[parameters('subnetPrefix')]"
-        }
+            }
     }
     ],
     "outputs": {  
