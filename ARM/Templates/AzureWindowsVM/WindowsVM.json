@@ -144,7 +144,9 @@
         "publicIPAddressType": "Dynamic",
         "publicIPAddressName": "[concat(parameters('vmName'),'-IP-', uniqueString(resourceGroup().id))]",
         "nicName": "[concat(parameters('vmName'),'-NIC')]",
-        "apiVersion": "2015-06-15"
+        "apiVersion": "2015-06-15",
+        "diskCaching": "None"
+
      },
     "resources": [  
         {
@@ -202,8 +204,36 @@
                     "managedDisk": {
                         "storageAccountType": "[parameters('diskStorageTier')]"
                     }
-                }
+                },
+                "copy": [
+                    {
+                        "name": "dataDisks",
+                        "count": "[parameters('numberofDisks')]",
+                        "input": {
+                            "name": "[concat(parameters('vmName'),copyindex())]",
+                            "lun": "[copyIndex('dataDisks')]",
+                            "createOption": "Empty",
+                            "caching": "[variables('diskCaching')]",
+                            "diskSizeGB": "[parameters('diskCapacity')]",
+                             "managedDisk": {
+                                    "storageAccountType": "[parameters('diskStorageTier')]"
+                             }
+                        }
+                    }
+                ]
+            },
+            "networkProfile": {
+                "networkInterfaces": 
+                [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                    }
+                ]
+            },
+            "hardwareProfile": {
+                "vmSize": "[parameters('vmSize')]"
             }
+
         }
     ],
     "outputs": {  }
