@@ -68,8 +68,8 @@
             }
         },
         "numberOfDisks": {
-            "type": "string",
-            "defaultValue": "2",
+            "type": "int",
+            "defaultValue": 2,
             "metadata": {
                 "description": "The number of disks to create"
             }
@@ -136,7 +136,7 @@
     },
     "variables": { 
         "virtualNetworkName": "[concat('VNET-', uniqueString(resourceGroup().id))]",
-        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+        "vnetID": " [resourceId ( resourceGroup().name, 'Microsoft.Network/virtualNetworks', variables('virtualNetworkName')) ]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
@@ -164,8 +164,7 @@
             "name": "[variables('nicName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
-                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
                 ],
             "properties": {
                 "ipConfigurations": [
@@ -189,51 +188,58 @@
             "name": "[parameters('vmname')]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2016-04-30-preview",
-            "storageProfile": {
-                "imageReference": {
-                    "publisher": "[variables('imagePublisher')]",
-                    "offer": "[variables('imageOffer')]",
-                    "sku": "[parameters('windowsOSVersion')]",
-                    "version": "[variables('imageVersion')]"
-                },
-                "osDisk": {
-                    "osType": "Windows",
-                    "caching": "ReadWrite",
-                    "createOption": "FromImage",
-                    "name": "OSDisk",
-                    "managedDisk": {
-                        "storageAccountType": "[parameters('diskStorageTier')]"
-                    }
-                },
-                "copy": [
-                    {
-                        "name": "dataDisks",
-                        "count": "[parameters('numberofDisks')]",
-                        "input": {
-                            "name": "[concat(parameters('vmName'),copyindex())]",
-                            "lun": "[copyIndex('dataDisks')]",
-                            "createOption": "Empty",
-                            "caching": "[variables('diskCaching')]",
-                            "diskSizeGB": "[parameters('diskCapacity')]",
-                             "managedDisk": {
-                                    "storageAccountType": "[parameters('diskStorageTier')]"
-                             }
+            "properties": {
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('imagePublisher')]",
+                        "offer": "[variables('imageOffer')]",
+                        "sku": "[parameters('windowsOSVersion')]",
+                        "version": "[variables('imageVersion')]"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage",
+                        "name": "OSDisk",
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('diskStorageTier')]"
                         }
-                    }
-                ]
-            },
-            "networkProfile": {
-                "networkInterfaces": 
-                [
-                    {
-                        "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
-                    }
-                ]
-            },
-            "hardwareProfile": {
-                "vmSize": "[parameters('vmSize')]"
-            }
+                    },
+                    "copy": [
+                        {
+                            "name": "dataDisks",
+                            "count": "[parameters('numberofDisks')]",
+                            "input": {
+                                "name": "[concat(parameters('vmName'),copyindex('dataDisks'))]",
+                                "lun": "[copyIndex('dataDisks')]",
+                                "createOption": "Empty",
+                                "caching": "[variables('diskCaching')]",
+                                "diskSizeGB": "[parameters('diskCapacity')]",
+                                "managedDisk": {
+                                        "storageAccountType": "[parameters('diskStorageTier')]"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": 
+                    [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                        }
+                    ]
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                }
 
+            }
         }
     ],
     "outputs": {  }
