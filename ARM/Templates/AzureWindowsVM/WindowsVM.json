@@ -136,7 +136,7 @@
     },
     "variables": { 
         "virtualNetworkName": "[concat('VNET-', uniqueString(resourceGroup().id))]",
-        "vnetID": " [resourceId ( resourceGroup().name, 'Microsoft.Network/virtualNetworks', variables('virtualNetworkName')) ]",
+        "vnetID": "[resourceId( resourceGroup().name, 'Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
@@ -188,6 +188,9 @@
             "name": "[parameters('vmname')]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2016-04-30-preview",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+            ],
             "properties": {
                 "storageProfile": {
                     "imageReference": {
