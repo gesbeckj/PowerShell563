@@ -6,12 +6,18 @@
   },
   "variables": {
     "skuTier": "Standard",
-    "vaultName": "[concat('Vault-', uniqueString(resourceGroup().id))]"
+    "vaultName": "[concat('Vault-', uniqueString(resourceGroup().id))]",
+    "PolicyName": "[concat('Backup-Policy-', uniqueString(resourceGroup().id))]",
+    "scheduleRunTimes": ["2016-12-19T02:00:00Z"],
+    "scheduleRunDays": ["Sunday"],
+    "weeklyRetentionDurationCount":		4,
+		"monthlyRetentionDurationCount":	12,
+    "dailyRetentionDurationCount": 7
   },
   "resources": [
     {
       "type": "Microsoft.RecoveryServices/vaults",
-      "apiVersion": "2015-11-10",
+      "apiVersion": "2016-12-01",
       "name": "[variables('vaultName')]",
       "location": "[resourceGroup().location]",
       "sku": {
@@ -20,6 +26,22 @@
       },
       "properties": {
       }
+    },
+    {
+        "apiVersion": "2015-11-10",
+        "name": "[concat(variables('vaultName'), '/', variables('policyName'))]",
+        "type": "Microsoft.RecoveryServices/vaults/backupPolicies",
+        "dependsOn": [ "[concat('Microsoft.RecoveryServices/vaults/', variables('vaultName'))]" ],
+        "location": "[resourceGroup().location]",
+        			"properties":	{	"backupManagementType": "AzureIaasVM",
+								"schedulePolicy": { "scheduleRunFrequency": "Daily","scheduleRunDays": null, "scheduleRunTimes": "[variables('scheduleRunTimes')]", "schedulePolicyType": "SimpleSchedulePolicy" },
+								"retentionPolicy": {
+									"dailySchedule":	{                                                                                                                                                              "retentionTimes": "[variables('scheduleRunTimes')]", "retentionDuration": { "count": "[variables(  'dailyRetentionDurationCount')]", "durationType": "Days"   } },
+									"weeklySchedule":	{ "daysOfTheWeek": "[variables('scheduleRunDays')]",                                                                                                             "retentionTimes": "[variables('scheduleRunTimes')]", "retentionDuration": { "count": "[variables( 'weeklyRetentionDurationCount')]", "durationType": "Weeks"  } },
+									"monthlySchedule":	{ "retentionScheduleFormatType": "Daily", "retentionScheduleDaily": { "daysOfTheMonth": [ { "date": 1, "isLast": false } ] }, "retentionScheduleWeekly": null, "retentionTimes": "[variables('scheduleRunTimes')]", "retentionDuration": { "count": "[variables('monthlyRetentionDurationCount')]", "durationType": "Months" } },
+									"retentionPolicyType": "LongTermRetentionPolicy"
+								}
+			}
     }
   ]
 }

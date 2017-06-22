@@ -142,7 +142,7 @@
         "imageOffer": "WindowsServer",
         "imageVersion": "latest",
         "publicIPAddressType": "Dynamic",
-        "publicIPAddressName": "[concat(parameters('vmName'),'-IP-', uniqueString(resourceGroup().id))]",
+        "publicIPAddressName": "[concat(parameters('vmName'),'-IP')]",
         "nicName": "[concat(parameters('vmName'),'-NIC')]",
         "apiVersion": "2015-06-15",
         "diskCaching": "None"
@@ -203,7 +203,7 @@
                         "osType": "Windows",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
-                        "name": "OSDisk",
+                        "name": "[concat(parameters('vmName'),'-OSDisk')]",
                         "managedDisk": {
                             "storageAccountType": "[parameters('diskStorageTier')]"
                         }
@@ -213,7 +213,7 @@
                             "name": "dataDisks",
                             "count": "[parameters('numberofDisks')]",
                             "input": {
-                                "name": "[concat(parameters('vmName'),copyindex('dataDisks'))]",
+                                "name": "[concat(parameters('vmName'),'-dataDisk', copyindex('dataDisks'))]",
                                 "lun": "[copyIndex('dataDisks')]",
                                 "createOption": "Empty",
                                 "caching": "[variables('diskCaching')]",
