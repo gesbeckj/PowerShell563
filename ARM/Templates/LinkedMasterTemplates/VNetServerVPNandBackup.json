@@ -108,7 +108,7 @@
                 "512",
                 "1024",
                 "2048",
-                "4096"
+                "4095"
             ],
             "metadata": {
                 "description": "This is the size of each disk in GB."
