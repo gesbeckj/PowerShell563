@@ -66,8 +66,7 @@
             "name": "[variables('gatewayName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('gatewayPublicIPName'))]",
-                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('gatewayPublicIPName'))]"
                 ],
             "properties": {
                 "ipConfigurations": [
