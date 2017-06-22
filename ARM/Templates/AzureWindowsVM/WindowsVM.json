@@ -64,7 +64,7 @@
                 "4096"
             ],
             "metadata": {
-                "description": "This is the size of each disk."
+                "description": "This is the size of each disk in GB."
             }
         },
         "numberOfDisks": {
