@@ -1,0 +1,314 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {  
+        "DeploySiteToSiteVPN":
+        {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "localGatewayIpAddress": {
+            "type": "string",
+            "defaultValue": "128.104.224.244",
+            "metadata": {
+                "description": "Public IP of your local/on-prem gateway. This is ignored if not deploying a Site to Site VPN."
+            }
+        },
+        "localAddressPrefix": {
+            "type": "string",
+            "defaultValue": "192.168.1.0/24",
+            "metadata": {
+                "description": "CIDR block representing the address space of your local/on-prem network's Subnet. This is ignored if not deploying a Site to Site VPN."
+            }
+        },
+        "azureVNetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.0.0/16",
+            "metadata": {
+                "description": "CIDR block representing the address space of the Azure VNet"
+            }
+        },
+        "gatewaySubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.254.0/27",
+            "metadata": {
+                "description": "CIDR block for gateway subnet, subset of azureVNetAddressPrefix address space. Should be a /27 block"
+            }
+        },
+        "sharedKey": {
+            "type": "string",
+            "defaultValue": "@!VPNTunnel@!",
+            "metadata": {
+                "description": "Shared key (PSK) for IPSec tunnel. This is ignored if not deploying a Site to Site VPN."
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "azureSubnet",
+            "metadata": {
+                "description": "Arbitrary name for the Azure Subnet"
+            }
+        },
+        "subnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.1.0/24",
+            "metadata": {
+                "description": "CIDR block for VM subnet, subset of azureVNetAddressPrefix address space"
+            }
+        },
+        "adminUsername": {
+        "type": "string",
+        "metadata": {
+            "description": "Username for the Virtual Machine."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+            "description": "Password for the Virtual Machine."
+            }
+        },
+        "windowsOSVersion": {
+            "type": "string",
+            "defaultValue": "2016-Datacenter",
+            "allowedValues": [
+                "2012-R2-Datacenter",
+                "2016-Datacenter-Core",
+                "2016-Datacenter"
+            ],
+        "metadata": {
+            "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+            }
+        },
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "Computer Name for the Virtual Machine."
+            },
+            "defaultValue": "serverName"
+        },
+        "diskStorageTier": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Premium_LRS"
+            ],
+            "metadata": {
+                "description": "This is the storage tier for the data disks."
+            }
+        },
+        "diskCapacity": {
+            "type": "string",
+            "defaultValue": "32",
+            "allowedValues": [
+                "32",
+                "64",
+                "128",
+                "512",
+                "1024",
+                "2048",
+                "4095"
+            ],
+            "metadata": {
+                "description": "This is the size of each disk in GB."
+            }
+        },
+        "numberOfDisks": {
+            "type": "int",
+            "defaultValue": 2,
+            "metadata": {
+                "description": "The number of disks to create"
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_DS1_v2",
+            "allowedValues":[
+                "Basic_A0",
+                "Basic_A1",
+                "Basic_A2",
+                "Basic_A3",
+                "Basic_A4",
+                "Standard_A0",
+                "Standard_A1",
+                "Standard_A10",
+                "Standard_A11",
+                "Standard_A2",
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_A5",
+                "Standard_A6",
+                "Standard_A7",
+                "Standard_A8",
+                "Standard_A9",
+                "Standard_D1",
+                "Standard_D1_v2",
+                "Standard_D11",
+                "Standard_D11_v2",
+                "Standard_D12",
+                "Standard_D12_v2",
+                "Standard_D13",
+                "Standard_D13_v2",
+                "Standard_D14",
+                "Standard_D14_v2",
+                "Standard_D15_v2",
+                "Standard_D2",
+                "Standard_D2_v2",
+                "Standard_D3",
+                "Standard_D3_v2",
+                "Standard_D4",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_DS1",
+                "Standard_DS1_v2",
+                "Standard_DS11",
+                "Standard_DS11_v2",
+                "Standard_DS12",
+                "Standard_DS12_v2",
+                "Standard_DS13",
+                "Standard_DS13_v2",
+                "Standard_DS14",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_DS2",
+                "Standard_DS2_v2",
+                "Standard_DS3",
+                "Standard_DS3_v2",
+                "Standard_DS4",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2"
+            ]
+        },
+        "registrationKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Registration key to use to onboard to the Azure Automation DSC pull/reporting server"
+            }
+        }
+    },
+    "variables": {  
+
+    },
+    "resources": [  
+        {
+            "apiVersion": "2017-05-10", 
+            "name": "VNetDeployment", 
+            "type": "Microsoft.Resources/deployments", 
+            "properties": { 
+                "mode": "Incremental", 
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureNetworking/VNet.json",
+                    "contentVersion": "1.0.0.0"
+                }, 
+            "parameters": { 
+                "azureVNetAddressPrefix":{"value": "[parameters('azureVNetAddressPrefix')]"},
+                "gatewaySubnetPrefix":{"value": "[parameters('gatewaySubnetPrefix')]"}
+                } 
+            } 
+        },
+        {
+            "apiVersion": "2017-05-10", 
+            "name": "Subnet", 
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/','VNetDeployment')]"
+            ], 
+            "properties": { 
+                "mode": "Incremental", 
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureNetworking/Subnet.json",
+                    "contentVersion": "1.0.0.0"
+                }, 
+            "parameters": { 
+                "subnetName":{"value": "[parameters('subnetName')]"},
+                "subnetPrefix":{"value": "[parameters('subnetPrefix')]"}
+                } 
+            } 
+        },
+        {
+             "apiVersion": "2017-05-10", 
+             "name": "SiteToSiteVPN", 
+             "type": "Microsoft.Resources/deployments", 
+             "condition": "[parameters('deploySiteToSiteVPN')]",
+             "dependsOn": [
+                    "[concat('Microsoft.Resources/deployments/','VNetDeployment')]"
+                    ], 
+             "properties": { 
+                 "mode": "Incremental", 
+                 "templateLink": {
+                     "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureNetworking/SiteToSiteVPN.json",
+                     "contentVersion": "1.0.0.0"
+                 }, 
+             "parameters": { 
+                 "localGatewayIpAddress":{"value": "[parameters('localGatewayIpAddress')]"},
+                 "localAddressPrefix":{"value": "[parameters('localAddressPrefix')]"},
+                 "sharedKey":{"value": "[parameters('sharedKey')]"}
+                 } 
+             } 
+        },
+        {
+             "apiVersion": "2017-05-10", 
+             "name": "WindowsVMDeployment", 
+             "type": "Microsoft.Resources/deployments", 
+             "dependsOn": [
+                    "[concat('Microsoft.Resources/deployments/','Subnet')]"
+                    ], 
+             "properties": { 
+                 "mode": "Incremental", 
+                 "templateLink": {
+                     "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureWindowsVM/WindowsVMwithDSC.json",
+                     "contentVersion": "1.0.0.0"
+                 }, 
+             "parameters": { 
+                 "adminUsername":{"value": "[parameters('adminUsername')]"},
+                 "adminPassword":{"value": "[parameters('adminPassword')]"},
+                 "windowsOSVersion":{"value": "[parameters('windowsOSVersion')]"},
+                 "vmName":{"value": "[parameters('vmName')]"},
+                 "subnetName":{"value": "[parameters('subnetName')]"},
+                 "diskStorageTier":{"value": "[parameters('diskStorageTier')]"},
+                 "diskCapacity":{"value": "[parameters('diskCapacity')]"},
+                 "numberOfDisks":{"value": "[parameters('numberOfDisks')]"},
+                 "vmSize":{"value": "[parameters('vmSize')]"},
+                 "registrationKey": {"value": "[parameters('registrationKey')]"}
+                 } 
+             } 
+        },
+        {
+             "apiVersion": "2017-05-10", 
+             "name": "BackupVaultDeployment", 
+             "type": "Microsoft.Resources/deployments", 
+             "dependsOn": [
+                    "[concat('Microsoft.Resources/deployments/','WindowsVMDeployment')]"
+                    ], 
+             "properties": { 
+                 "mode": "Incremental", 
+                 "templateLink": {
+                     "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureBackup/Backup.json",
+                     "contentVersion": "1.0.0.0"
+                 }, 
+             "parameters": { 
+                 } 
+             } 
+        },
+        {
+             "apiVersion": "2017-05-10", 
+             "name": "BackupSetup", 
+             "type": "Microsoft.Resources/deployments", 
+             "dependsOn": [
+                    "[concat('Microsoft.Resources/deployments/','BackupVaultDeployment')]"
+                    ], 
+             "properties": { 
+                 "mode": "Incremental", 
+                 "templateLink": {
+                     "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureBackup/BackupAzureVMs.json",
+                     "contentVersion": "1.0.0.0"
+                 }, 
+             "parameters": { 
+                 "existingVirtualMachines":{"value": "[array(parameters('vmName'))]"}
+                 } 
+             } 
+        }
+    ],
+    "outputs": {  }
+}
