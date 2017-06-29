@@ -259,6 +259,9 @@
             "properties": {
             "publisher": "Microsoft.Powershell",
             "type": "DSC",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+            ],
             "typeHandlerVersion": "2.19",
             "autoUpgradeMinorVersion": true,
             "protectedSettings": {
