@@ -72,9 +72,9 @@
     },
     "outputs": {
           "SqlServerURL": {
-    "type": "string",
-    "value": "[reference(variables('sqlservername')).fullyQualifiedDomainName]"
- }
+            "type": "string",
+             "value": "[reference(variables('sqlservername')).fullyQualifiedDomainName]"
+            }
     },
     "resources": [
         {
