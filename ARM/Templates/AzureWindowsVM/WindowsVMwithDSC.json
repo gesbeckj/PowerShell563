@@ -255,13 +255,13 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
             "apiVersion": "2015-06-15",
+            "dependsOn": [
+               "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+            ],
             "location": "[resourceGroup().location]",
             "properties": {
             "publisher": "Microsoft.Powershell",
             "type": "DSC",
-            "dependsOn": [
-               "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
-            ],
             "typeHandlerVersion": "2.19",
             "autoUpgradeMinorVersion": true,
             "protectedSettings": {
