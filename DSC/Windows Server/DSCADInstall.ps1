@@ -40,7 +40,10 @@ param(
 #Output Path
 [Parameter(Mandatory)]
 [ValidateNotNullOrEmpty()]
-[String] $Path
+[String] $Path,
+
+#Configuration Data
+[hashtable]$cd
 )
 
 Configuration DSCADInstall {
@@ -75,7 +78,7 @@ param(
 
 Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 1.1
 Import-DscResource -Module xActiveDirectory
-Node $AllNodes.nodename
+Node $Computername
 {        
         WindowsFeature ADDSInstall
         {
@@ -183,4 +186,4 @@ Node $AllNodes.nodename
         }     
 }
 }
-DSCADInstall -ComputerName $ComputerName -OutputPath $path -domainName $domainName -SafeModeAdministratorCred $SafeModeCred -DomainCred $DomainCred -NetBIOSDomainName $NetBIOSDomainName -CompanyName $CompanyName
+DSCADInstall -ComputerName $ComputerName -OutputPath $path -domainName $domainName -SafeModeAdministratorCred $safemodeAdministratorCred -DomainCred $DomainCred -NetBIOSDomainName $NetBIOSDomainName -CompanyName $CompanyName -ConfigurationData $cd

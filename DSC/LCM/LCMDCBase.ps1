@@ -16,7 +16,7 @@ Configuration LCM {
             ServerURL = 'https://pull.gesbeck.tk:8080/PsDscPullserver.svc'
             AllowUnsecureConnection = $false
             RegistrationKey = $RegistrationKey.GetNetworkCredential().Password
-            ConfigurationNames = @('BaseOSConfig', 'EnableRDP')
+            ConfigurationNames = @('BaseOSConfig', 'EnableRDP','AzureDC')
         }
         ResourceRepositoryWeb PullServerModules {
             ServerURL = 'https://pull.gesbeck.tk:8080/PsDscPullserver.svc'
@@ -32,6 +32,9 @@ Configuration LCM {
             ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
         }
         PartialConfiguration EnableRDP {
+            ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
+        }
+        PartialConfiguration DSCADInstall {
             ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
         }
     }
