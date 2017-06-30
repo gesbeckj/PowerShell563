@@ -68,7 +68,7 @@
         }
     },
     "variables": {
-        "sqlserverName": "[concat('sqlserver', uniqueString(resourceGroup().id))]"
+        "sqlserverName": "[concat('sqlserver-', uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
