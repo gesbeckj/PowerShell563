@@ -17,7 +17,7 @@ param(
 [String] $Path
 )
 
-Configuration DSCServerOSConfig {
+Configuration BaseOSConfig {
 param(
 #ComputerName
 [string[]]$ComputerName="localhost"
@@ -49,4 +49,4 @@ Node $ComputerName
 }
 }
 
-DSCServerOSConfig -ComputerName $ComputerName -OutputPath $path
+BaseOSConfig -ComputerName $ComputerName -OutputPath $path
