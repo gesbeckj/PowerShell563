@@ -70,12 +70,6 @@
     "variables": {
         "sqlserverName": "[concat('sqlserver-', uniqueString(resourceGroup().id))]"
     },
-    "outputs": {
-          "SqlServerURL": {
-            "type": "string",
-             "value": "[reference(variables('sqlservername')).fullyQualifiedDomainName]"
-            }
-    },
     "resources": [
         {
             "apiVersion": "2015-05-01-preview",
@@ -118,5 +112,8 @@
             ],
             "type": "Microsoft.Sql/servers"
         }
-    ]
+    ],
+    "outputs": {
+        
+    }
 }
