@@ -29,17 +29,17 @@ Node $ComputerName
 {        
         xUAC UAC
         {
-            Setting = 'AlwaysNotify'
+            Setting = 'NeverNotify'
         }
         xIEEsc IEEscAdmin
         {
             UserRole = 'Administrators'
-            IsEnabled = $True
+            IsEnabled = $false
         }
         xIEEsc IEEscUsers
         {
             UserRole = 'Users'
-            IsEnabled = $True
+            IsEnabled = $false
         }
         xTimeZone TimeZone
         {
