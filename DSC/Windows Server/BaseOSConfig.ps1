@@ -2,7 +2,7 @@
 .SYNOPSIS
 This creates a MOF file for DSC for the base OS configuration. 
 .DESCRIPTION
-This creates a MOF file for DSC for disabling UAC, enabling IEEsc and setting hte timezone. 
+This creates a MOF file for DSC for enabling UAC, enabling IEEsc and setting the timezone. 
 .EXAMPLE
 DSCServerOSConfig.ps1 -ComputerName 'Server'
 #>
@@ -29,7 +29,7 @@ Node $ComputerName
 {        
         xUAC UAC
         {
-            Setting = 'NeverNotify'
+            Setting = 'NotifyChanges'
         }
         xIEEsc IEEscAdmin
         {
