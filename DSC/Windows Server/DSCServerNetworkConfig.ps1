@@ -101,4 +101,4 @@ Configuration ServerNetworkConfig {
         }
     }
 }
-ServerNetworkConfig -ComputerName $ComputerName -InterfaceAlias $InterfaceAlias -IPv4Address $IPv4Address -PrefixLength $PrefixLength -Gateway $Gateway -DNSServers $DNSServers -outpath $Path
+ServerNetworkConfig -ComputerName $ComputerName -InterfaceAlias $InterfaceAlias -IPv4Address $IPv4Address -PrefixLength $PrefixLength -Gateway $Gateway -DNSServers $DNSServers -outputpath $Path
