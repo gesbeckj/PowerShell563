@@ -30,9 +30,15 @@ Configuration LCM {
         }
         PartialConfiguration BaseOSConfig {
             ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
+            RefreshMode = 'Pull'
         }
         PartialConfiguration EnableRDP {
             ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
+            RefreshMode = 'Pull'
+        }
+        PartialConfiguration ServerNetworkConfig {
+            ConfigurationSource = '[PartialConfiguration]ServerNetworkConfig'
+            RefreshMode = 'Push'
         }
     }
 }
