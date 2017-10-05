@@ -2,8 +2,14 @@
 Configuration LCM {
     param
     (
-        [Parameter(Mandatory=$True)]
-        [PSCredential]$RegistrationKey
+        [Parameter(Mandatory = $True)]
+        [PSCredential]$RegistrationKey,
+
+        [Parameter(Mandatory = $True)]
+        [string]$thumbprint,
+
+        [Parameter(Mandatory = $True)]
+        [string]$ConfigName
     )
     Node localhost {
         Settings {
@@ -11,12 +17,13 @@ Configuration LCM {
             RefreshMode = 'Pull'
             AllowModuleOverwrite            = $true;
             RebootNodeIfNeeded              = $true;
+            CertificateID = $thumbprint;
         }
         ConfigurationRepositoryWeb DSCPullServer {
             ServerURL = 'https://pull.gesbeck.tk:8080/PsDscPullserver.svc'
             AllowUnsecureConnection = $false
             RegistrationKey = $RegistrationKey.GetNetworkCredential().Password
-            ConfigurationNames = @('BaseOSConfig', 'EnableRDP')
+            ConfigurationNames = @($ConfigName)
         }
         ResourceRepositoryWeb PullServerModules {
             ServerURL = 'https://pull.gesbeck.tk:8080/PsDscPullserver.svc'
@@ -28,17 +35,10 @@ Configuration LCM {
             ServerUrl = $RegistrationUrl
             RegistrationKey = $RegistrationKey.GetNetworkCredential().Password
         }
-        PartialConfiguration BaseOSConfig {
+        PartialConfiguration $ConfigName {
             ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
             RefreshMode = 'Pull'
-        }
-        PartialConfiguration EnableRDP {
-            ConfigurationSource = "[ConfigurationRepositoryWeb]DSCPullServer"
-            RefreshMode = 'Pull'
-        }
-        PartialConfiguration ServerNetworkConfig {
-            ConfigurationSource = '[PartialConfiguration]ServerNetworkConfig'
-            RefreshMode = 'Push'
         }
     }
 }
+#LCM -RegistrationKey (Get-Credential) -thumbprint ‎"F7F03D17AF2FA167200D84CB78487B2E8835F698" -ConfigName 'MDTServer'
