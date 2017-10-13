@@ -93,6 +93,11 @@ Configuration MDTServer {
                 Name   = 'NET-Framework-45-Core'
                 Ensure = 'Present'
             }
+            WindowsFeature 'FS-Data-Deduplication'
+            {
+                Name   = 'FS-Data-Deduplication'
+                Ensure = 'Present'
+            }  
             WindowsFeature 'WDS'
             {
                 Name   = 'WDS'
