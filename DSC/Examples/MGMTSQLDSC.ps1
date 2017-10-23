@@ -79,7 +79,7 @@ Node $ComputerName
         }
         xComputer JoinDomain
        { 
-            DomainName = "management.local"
+            DomainName = $DomainName
             Credential = $DomainAdminCredential
             Name = "MGMT-SQL-00"
         }
@@ -101,7 +101,7 @@ Node $ComputerName
         xADUser SQLAdminUser
         {
             DomainAdministratorCredential = $DomainAdminCredential
-            UserName = $SqlAdministratorCredential.UserName
+            UserName = "sqladmin"
             Ensure = "Present"
             Password = $SqlAdministratorCredential
             DomainName = $DomainName
@@ -109,7 +109,7 @@ Node $ComputerName
         xADUser SQLServiceUser
         {
             DomainAdministratorCredential = $DomainAdminCredential
-            UserName = $SqlServiceCredential.UserName
+            UserName = "sqlserviceuser"
             Ensure = "Present"
             Password = $SqlServiceCredential
             DomainName = $DomainName
@@ -117,14 +117,14 @@ Node $ComputerName
         xADUser SQLAgentServiceUser
         {
             DomainAdministratorCredential = $DomainAdminCredential
-            UserName = $SqlAgentServiceCredential.UserName
+            UserName = "sqlagentserviceuser"
             Ensure = "Present"
             Password = $SqlAgentServiceCredential
             DomainName = $DomainName
         }
         xADGroup SQLAdminGroup
         {
-            GroupName = 'SQL Administrator'
+            GroupName = 'SQL Administrators'
             DomainController = 'MGMT-DC'
             Credential = $DomainAdminCredential
         }
@@ -165,6 +165,7 @@ Node $ComputerName
             DependsOn = '[xSQLServerSetup]SQLSetup'
             Features = 'SQLENGINE,FULLTEXT,RS'
             InstanceName = "SYSTEMCENTER"
+            SourcePath = "\\mgmt-storage.mgmt.local\Repository\SQL2016\"
         }
 }
 }

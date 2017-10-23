@@ -41,4 +41,4 @@ Configuration LCM {
         }
     }
 }
-#LCM -RegistrationKey (Get-Credential) -thumbprint ‎"F7F03D17AF2FA167200D84CB78487B2E8835F698" -ConfigName 'MDTServer'
+LCM -RegistrationKey (Get-Credential) -thumbprint ‎"‎F931BAC3A8F6909CC79FD25565E609A469C7393B" -ConfigName 'DINO-Sync'
