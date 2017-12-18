@@ -41,4 +41,4 @@ Configuration LCM {
         }
     }
 }
-LCM -RegistrationKey (Get-Credential) -thumbprint ‎"‎F931BAC3A8F6909CC79FD25565E609A469C7393B" -ConfigName 'DINO-Sync'
+LCM -RegistrationKey (Get-Credential) -thumbprint ‎"‎‎‎‎0b01812952665674b12f0bc9e8c9e62f6c87bf9a" -ConfigName 'DINO-DC2'
