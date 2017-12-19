@@ -1,0 +1,9 @@
+no ip nat inside source static tcp 192.168.63.160 6514 interface GigabitEthernet0/0 6514
+no ip nat inside source static udp 192.168.63.160 7514 interface GigabitEthernet0/0 7514
+no ip nat inside source static tcp 192.168.63.160 7514 interface GigabitEthernet0/0 7514
+no ip nat inside source static tcp 192.168.63.160 8514 interface GigabitEthernet0/0 8514
+
+ip nat inside source static tcp 10.30.30.2 5001 interface GigabitEthernet0/0 5001
+ip nat inside source static tcp 10.30.30.2 5002 interface GigabitEthernet0/0 5002
+ip nat inside source static tcp 10.30.30.2 5000 interface GigabitEthernet0/0 5000
+ip nat inside source static tcp 10.30.30.2 5003 interface GigabitEthernet0/0 5003
