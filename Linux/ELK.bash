@@ -15,3 +15,4 @@ apt-get update && apt-get install kibana
 /bin/systemctl enable kibana.service
 systemctl start kibana.service
 apt-get update && apt-get install logstash
+systemctl start logstash.service

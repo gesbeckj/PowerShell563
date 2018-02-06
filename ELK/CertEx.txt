@@ -1,0 +1,34 @@
+input 
+{
+  udp 
+  {
+    port => "8514"
+    type => "syslog-cisco"
+  }
+  syslog
+  {
+    type => "cisco-asa"
+    port => "6514"
+  }
+  tcp 
+  {
+    port => "8514"
+    type => "syslog-cisco"
+  }
+  syslog 
+  {
+    type => "meraki"
+    port => "7514"
+  }
+}
+
+output 
+{
+    lumberjack 
+	{
+    hosts => [ "10.30.30.2" ]
+    port => 5000
+    ssl_certificate => "c:\logstash\ca.cert"
+    ssl_ca_file => "c:\logstash\ca.cert"
+	}
+}

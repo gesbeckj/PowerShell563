@@ -1,0 +1,4 @@
+failover exec mate copy /noconfirm http://69.129.193.32/repo/asdm-791.bin disk0:/asdm-791.bin
+failover exec mate copy /noconfirm http://69.129.193.32/repo/asa991-lfbff-k8.SPA disk0:/asa991-lfbff-k8.SPA
+conf t
+asdm image disk0:/asdm-791.bin

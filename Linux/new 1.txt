@@ -1,0 +1,8 @@
+interface GigabitEthernet0/1.$VLANID
+description $description
+encapsulation dotqQ $VLADID
+ip address $IP $SUBNET
+ip virtual-reassembly in
+ip nat inside
+
+access-list 105 permit ip $NETWORK $WILDCARD any
