@@ -1,0 +1,75 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {  
+        "azureVNetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.0.0/16",
+            "metadata": {
+                "description": "CIDR block representing the address space of the Azure VNet"
+            }
+        },
+        "gatewaySubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.254.0/27",
+            "metadata": {
+                "description": "CIDR block for gateway subnet, subset of azureVNetAddressPrefix address space. Should be a /27 block"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "azureSubnet",
+            "metadata": {
+                "description": "Arbitrary name for the Azure Subnet"
+            }
+        },
+        "subnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.254.1.0/24",
+            "metadata": {
+                "description": "CIDR block for VM subnet, subset of azureVNetAddressPrefix address space"
+            }
+        }
+    },
+    "variables": {  
+
+    },
+    "resources": [  
+        {
+            "apiVersion": "2017-05-10", 
+            "name": "VNetDeployment", 
+            "type": "Microsoft.Resources/deployments", 
+            "properties": { 
+                "mode": "Incremental", 
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureNetworking/VNet.json",
+                    "contentVersion": "1.0.0.0"
+                }, 
+            "parameters": { 
+                "azureVNetAddressPrefix":{"value": "[parameters('azureVNetAddressPrefix')]"},
+                "gatewaySubnetPrefix":{"value": "[parameters('gatewaySubnetPrefix')]"}
+                } 
+            } 
+        },
+        {
+            "apiVersion": "2017-05-10", 
+            "name": "Subnet", 
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/','VNetDeployment')]"
+            ], 
+            "properties": { 
+                "mode": "Incremental", 
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/gesbeckj/PowerShell563/master/ARM/Templates/AzureNetworking/Subnet.json",
+                    "contentVersion": "1.0.0.0"
+                }, 
+            "parameters": { 
+                "subnetName":{"value": "[parameters('subnetName')]"},
+                "subnetPrefix":{"value": "[parameters('subnetPrefix')]"}
+                } 
+            } 
+        }
+    ],
+    "outputs": {  }
+}
