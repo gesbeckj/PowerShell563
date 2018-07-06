@@ -1,7 +1,5 @@
 #Powershell
 Expand-Archive -Path .\logstash.zip -DestinationPath c:\
-New-NetFirewallRule -DisplayName "Allow TCP for Logstash" -Direction Inbound -LocalPort 5000-5003 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "Allow UDP for Logstash" -Direction Inbound -LocalPort 5000-5003 -Protocol UDP -Action Allow
 New-NetFirewallRule -DisplayName "Allow TCP for Logstash" -Direction Inbound -LocalPort 8514 -Protocol TCP -Action Allow
 New-NetFirewallRule -DisplayName "Allow UDP for Logstash NetFlow" -Direction Inbound -LocalPort 2055 -Protocol UDP -Action Allow
 
