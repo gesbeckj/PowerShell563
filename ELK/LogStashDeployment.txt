@@ -1,0 +1,15 @@
+#Powershell
+Expand-Archive -Path .\logstash.zip -DestinationPath c:\
+New-NetFirewallRule -DisplayName "Allow TCP for Logstash" -Direction Inbound -LocalPort 5000-5003 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Allow UDP for Logstash" -Direction Inbound -LocalPort 5000-5003 -Protocol UDP -Action Allow
+New-NetFirewallRule -DisplayName "Allow TCP for Logstash" -Direction Inbound -LocalPort 8514 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Allow UDP for Logstash NetFlow" -Direction Inbound -LocalPort 2055 -Protocol UDP -Action Allow
+
+
+cd C:\Logstash\nssm-2.24\win64
+.\NSSM.exe install logstash C:\Logstash\bin\Logstash.bat
+.\NSSM.exe set logstash AppParameters -f c:\logstash\logstashlumberjack.conf
+.\NSSM.exe set logstash AppDirectory C:\Logstash\
+net start logstash
+.\NSSM.exe set logstash AppStopMethodSkip 6
+

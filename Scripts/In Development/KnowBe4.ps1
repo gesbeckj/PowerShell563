@@ -1,0 +1,4 @@
+Enable-OrganizationCustomization
+Set-HostedConnectionFilterPolicy -Identity Default -ipallowlist 23.21.109.197, 23.21.109.212, 192.254.121.248
+New-TransportRule -Mode Enforce -SenderIpRanges 23.21.109.212,23.21.109.197,192.254.121.248 -StopRuleProcessing $False -SetAuditSeverity DoNotAudit -SetHeaderName X-MS-Exchange-Organization-BypassClutter -RuleErrorAction Ignore -SetSCL -1 -SetHeaderValue true -SenderAddressLocation Header -Name "Bypass Clutter & Spam Filtering by IP Address"
+New-TransportRule -Mode Enforce -SenderIpRanges 23.21.109.212,23.21.109.197,192.254.121.248 -StopRuleProcessing $False -SetAuditSeverity DoNotAudit -SetHeaderName X-Forefront-Antispam-Report -RuleErrorAction Ignore -SetHeaderValue "SFV:SKI;" -SenderAddressLocation Header -Name "KnowBe4-Skip Junk Filtering"

@@ -1,7 +1,7 @@
 cd C:\Logstash\logstash-6.1.0\nssm-2.24\win64
-NSSM install logstash C:\Logstash\logstash-6.1.0\bin\Logstash.bat
-NSSM set logstash AppParameters -f c:\logstash\logstash-6.1.0\logstash.conf
-NSSM set logstash AppDirectory C:\Logstash\logstash-6.1.0
+NSSM install logstash C:\Logstash\bin\Logstash.bat
+NSSM set logstash AppParameters -f c:\logstash\logstashlumberjack.conf
+NSSM set logstash AppDirectory C:\Logstash\
 NSSM set logstash AppEnvironmentExtra "Java_HOME=C:\Program Files (x86)\Java\jre1.8.0_151"
 REM Replace stdout and stderr files
 REM Disable WM_CLOSE, WM_QUIT in the Shutdown options. Without it, NSSM can't stop Logstash properly
