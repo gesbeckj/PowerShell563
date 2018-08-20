@@ -11,3 +11,5 @@ cd C:\Logstash\nssm-2.24\win64
 net start logstash
 .\NSSM.exe set logstash AppStopMethodSkip 6
 
+New-NetFirewallRule -DisplayName "Allow TCP for MerakiSysLog" -Direction Inbound -LocalPort 7514 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Allow UDP for MerakiSysLog" -Direction Inbound -LocalPort 7514 -Protocol UDP -Action Allow

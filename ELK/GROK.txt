@@ -1,0 +1,9 @@
+<*>* %{BASE10NUM:epoch_time} %{WORD:Hostname} events content_filtering_block url=%{QUOTEDSTRING:URL} category0=%{QUOTEDSTRING:Category} server='%{IP:IP}:%{INT:Port}' client_mac='%{COMMONMAC:Client}'
+<*>* %{BASE10NUM:epoch_time} %{WORD:Hostname} urls src=%{IP:SourceIP}:%{INT:SourcePort} dst=%{IP:DestIP}:%{INT:DestPort} mac=%{COMMONMAC:Client} agent=%{QUOTEDSTRING:Agent} request: %{WORD:RequestType} %{URIPROTO:Protocol}://%{URIHOST:URL}
+<*>* %{BASE10NUM:epoch_time} %{WORD:Hostname} urls src=%{IP:SourceIP}:%{INT:SourcePort} dst=%{IP:DestIP}:%{INT:DestPort} mac=%{COMMONMAC:Client} request: %{WORD:RequestType} %{URIPROTO:Protocol}://%{URIHOST:URL}
+
+filter {
+  geoip {
+    DestIP => "clientip"
+  }
+}

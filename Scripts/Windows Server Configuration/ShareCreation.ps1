@@ -46,7 +46,6 @@ foreach($share in $shares)
     $acl = get-acl $folder
     $acl.AddAccessRule($accessRule)
     set-acl $folder -acl $acl
-
     $acl = get-acl $folder
     $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($admin, "FullControl", "ContainerInherit, ObjectInherit", "None","Allow")
     $acl.AddAccessRule($accessRule)
@@ -68,7 +67,6 @@ foreach($share in $shares)
             Write-Output $prop.value
             [string]$name = $prop.value.ToString()
             get-aduser -Filter {Name -like $name} | Add-ADPrincipalGroupMembership -MemberOf $share.Share
-     
             }
         }
     }

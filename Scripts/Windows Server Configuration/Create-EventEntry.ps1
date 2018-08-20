@@ -6,7 +6,7 @@ This creates an error event entry in the application log with the specified sour
 .EXAMPLE
 Create-EventEntry -Source "Test" -Message "This is a test application error message"
 .NOTES
-Must run as Local Administrator
+Must run with local administrator privileges.
 #>
 [CmdletBinding()]
 
