@@ -14,24 +14,8 @@ Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\SQMClient\Windows' CEIPEnable 0
 #Enable Windows File Sharing
 Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing"
 
-New-NetIPAddress -InterfaceAlias Ethernet -IPAddress 10.100.63.51 -AddressFamily IPv4 -PrefixLength 24
+New-NetIPAddress -InterfaceAlias Ethernet -IPAddress 10.100.63.21 -AddressFamily IPv4 -PrefixLength 24
 Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses ("10.100.63.5", "10.63.100.63.6")
 Get-NetAdapter | New-NetRoute -DestinationPrefix "0.0.0.0/0" -NextHop 10.100.63.1
 
-Rename-Computer -NewName "GS-Mgmt"
-#Restart-Computer
-
-Add-Computer -DomainName "ad.goblinsolutions.tk" -Credential (Get-Credential)
-New-Item C:\Admin -ItemType Directory
-Invoke-WebRequest -Uri http://aka.ms/WACDownload -OutFile c:\admin\WAC.msi
-msiexec /i c:\admin\WAC.msi
-#I accept the terms of hte License Agreement
-#Next
-#Use Microsoft Update when I check for updates
-#Next
-#Allow Windows Admin Center to modify this machine's trusted hosts settings
-#Port 443
-#Generate SSL
-#Redirect HTTP Port 80 traffic to HTTPS
-
-Get-WindowsFeature *RSAT* | Add-WindowsFeature
+Add-Computer -DomainName "ad.goblinsolutions.tk" -Credential (Get-Credential) -NewName "GS-File-1"
