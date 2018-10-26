@@ -1,9 +1,20 @@
-﻿$Tenants = Get-MsolPartnerContract -All | Select-Object TenantId
+﻿$Tenants = Get-MsolPartnerContract -All 
 $role = Get-MsolRole -RoleName "Company Administrator"
 $AdminInfo = Get-MsolRoleMember -RoleObjectId $role.ObjectId | Where-Object {$_.DisplayName -ne "Abe Aberdean"} | Where-Object {$_.EmailAddress -notlike "administrator@*"} |  Select DisplayName, EmailAddress, isLicensed
+$adminInfo = @()
 foreach ($company in $Tenants)
 {
     
    # write-host $company
-    $AdminInfo += Get-MsolRoleMember -RoleObjectId $role.ObjectId -TenantId $company.TenantId | Where-Object {$_.DisplayName -ne "Abe Aberdean"} | Where-Object {$_.EmailAddress -notlike "administrator@*"} | Where-Object {$_.EmailAddress -notlike "admin@*"} | Where-Object {$_.isLicensed -eq $true} | Select DisplayName, EmailAddress
+   $Admins = Get-MsolRoleMember -RoleObjectId $role.ObjectId -TenantId $company.TenantId   | Where-Object {$_.isLicensed -eq $true} | Select DisplayName, EmailAddress
+   foreach ($admin in $admins)
+   {
+    $data = New-Object PSObject -Property @{
+        Tenant = $company.name
+        DisplayName = $admin.DisplayName
+        EmailAddress = $admin.EmailAddress
+    }
+    $AdminInfo += $data
+   }
+
 }
