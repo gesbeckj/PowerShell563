@@ -1,6 +1,6 @@
 ﻿$Tenants = Get-MsolPartnerContract -All 
 $role = Get-MsolRole -RoleName "Company Administrator"
-$AdminInfo = Get-MsolRoleMember -RoleObjectId $role.ObjectId | Where-Object {$_.DisplayName -ne "Abe Aberdean"} | Where-Object {$_.EmailAddress -notlike "administrator@*"} |  Select DisplayName, EmailAddress, isLicensed
+$AdminInfo = Get-MsolRoleMember -RoleObjectId $role.ObjectId |  Select DisplayName, EmailAddress, isLicensed
 $adminInfo = @()
 foreach ($company in $Tenants)
 {
