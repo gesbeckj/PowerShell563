@@ -3,5 +3,5 @@ foreach ($ADComputer in $ADComputers)
 {
 Write-Output ("Installing Full SSM Suite on: " + $ADComputer.DNSHostName)
 $computerName = '\\' + $ADComputer.Name
-Invoke-Command {C:\Bin\PsExec.exe $computerName dsregcmd /leave} -ErrorAction SilentlyContinue -WarningAction SilentlyContinue -InformationAction SilentlyContinue 
+Invoke-Command {Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Providers\Client Side Rendering Print Provider\Servers\SW-DC2\" -Recurse} -ErrorAction SilentlyContinue -WarningAction SilentlyContinue 
 }
