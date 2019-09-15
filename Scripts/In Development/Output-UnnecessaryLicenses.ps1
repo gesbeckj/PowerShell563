@@ -9,12 +9,12 @@ Output-UnnecessaryLicenses -FilePath "C:\users\owner\documents\Output.csv" -O365
 You will need Global Admin Credentials. 
 #>
 param (
-    #VHDX File Name to Create
+    #Export File Path
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]$FilePath,
 
-    #Source WIM File to Use
+    #O365Credential
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [PSCredential]$O365Cred
