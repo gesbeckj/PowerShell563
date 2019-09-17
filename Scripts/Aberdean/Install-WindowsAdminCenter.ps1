@@ -33,6 +33,6 @@ Process
     Write-Verbose "Windows Admin Center will listen on port $WindowsAdminCenterHTTPSPort"
     Write-Verbose "Starting Windows Admin Center Install. Logging install to $env:TEMP\log.txt"
     Start-Process msiexec.exe -Wait -ArgumentList "/i $DownloadDestination /qn /L*v $env:TEMP\log.txt SME_PORT=$WindowsAdminCenterHTTPSPort SSL_CERTIFICATE_OPTION=generate"
-    Remove-Item $DownloadDestination
+    Remove-Item $DownloadDestination -force
     Write-Verbose "Windows Admin Installer Completed. Installation log file is at $env:TEMP\log.txt"
 }

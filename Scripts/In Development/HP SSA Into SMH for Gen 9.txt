@@ -1,0 +1,3 @@
+"c:\Program Files\Smart Storage Administrator\ssa\bin\ssa.exe" -install
+
+"c:\Program Files\Smart Storage Administrator\ssa\bin\ssa.exe" -start
