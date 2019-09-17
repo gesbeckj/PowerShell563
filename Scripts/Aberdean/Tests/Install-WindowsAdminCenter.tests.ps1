@@ -12,4 +12,7 @@ Describe "Install-WindowsAdminCenter Tests" {
     It "Should automatically delete the installer download"{
         (Test-Path "$env:TEMP\WindowsAdminCenter.msi") | Should be $False
     }
+    It "Windows Admin Center should be listening on TCP port"{
+        Test-NetConnection -ComputerName localhost -Port 443 | Should Be $True
+    }
 }
