@@ -24,10 +24,6 @@ Process
     }
     catch {
         Write-Error $Error[0]
-    }
-    if (!(Test-Path $DownloadDestination))
-    {
-        Write-Error "An unknown error occuring. The installer is not at $DownloadDestination as expected"
         throw
     }
     Write-Verbose "Windows Admin Center will listen on port $WindowsAdminCenterHTTPSPort"
