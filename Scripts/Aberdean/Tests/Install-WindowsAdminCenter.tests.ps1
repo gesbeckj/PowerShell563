@@ -15,4 +15,10 @@ Describe "Install-WindowsAdminCenter Tests" {
     It "Windows Admin Center should be listening on TCP port"{
         Test-NetConnection -ComputerName localhost -Port 443 | Should Be $True
     }
+    It "Should throw if provided an invalid folder"{
+        {&"$here\..\Install-WindowsAdminCenter.ps1" -DownloadDestination "C:\NOTAFOLDER\WAC.msi"} |  Should Throw
+    }
+    It "Should throw if provided an invalid download source"{
+        {&"$here\..\Install-WindowsAdminCenter.ps1" -WindowsAdminCenterDownloadSource "http://aka.ms/NOTTHEWACDownload"} |  Should Throw
+    }
 }
