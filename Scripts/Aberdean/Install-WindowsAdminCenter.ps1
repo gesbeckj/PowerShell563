@@ -14,7 +14,7 @@ Process
     if (!(Test-Path (Split-Path $DownloadDestination)))
     {
         Write-Error "The specified folder for downloading the file does not exist. Please create the folder and try again."
-        return
+        throw
     }
     Write-Verbose "Downloading Windows Admin Center from $WindowsAdminCenterDownloadSource"
     Write-Verbose "Downloading Windows Admin Center to $DownloadDestination"
@@ -28,7 +28,7 @@ Process
     if (!(Test-Path $DownloadDestination))
     {
         Write-Error "An unknown error occuring. The installer is not at $DownloadDestination as expected"
-        return
+        throw
     }
     Write-Verbose "Windows Admin Center will listen on port $WindowsAdminCenterHTTPSPort"
     Write-Verbose "Starting Windows Admin Center Install. Logging install to $env:TEMP\log.txt"
