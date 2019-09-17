@@ -19,6 +19,6 @@ Describe "Install-WindowsAdminCenter Tests" {
         {&"$here\..\Install-WindowsAdminCenter.ps1" -DownloadDestination "C:\NOTAFOLDER\WAC.msi"} |  Should Throw
     }
     It "Should throw if provided an invalid download source"{
-        {&"$here\..\Install-WindowsAdminCenter.ps1" -WindowsAdminCenterDownloadSource "http:/NOTADOWNLOAD.COM/NOTTHEWACDownload"} |  Should Throw
+        {&"$here\..\Install-WindowsAdminCenter.ps1" -WindowsAdminCenterDownloadSource "http://NOTADOWNLOAD.COM/NOTTHEWACDownload"} |  Should Throw
     }
 }
