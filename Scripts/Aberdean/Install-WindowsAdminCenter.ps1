@@ -4,7 +4,7 @@ Param (
 $WindowsAdminCenterDownloadSource = "http://aka.ms/WACDownload",
 
 [string]
-$DownloadDestination = "C:\WindowsAdminCenter.msi",
+$DownloadDestination = "$env:TEMP\WindowsAdminCenter.msi",
 
 [int]
 $WindowsAdminCenterHTTPSPort = 443
@@ -35,4 +35,5 @@ Process
     Start-Process msiexec.exe -Wait -ArgumentList "/i $DownloadDestination /qn /L*v $env:TEMP\log.txt SME_PORT=$WindowsAdminCenterHTTPSPort SSL_CERTIFICATE_OPTION=generate"
     Remove-Item $DownloadDestination -force
     Write-Verbose "Windows Admin Installer Completed. Installation log file is at $env:TEMP\log.txt"
+    return
 }
