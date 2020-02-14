@@ -1,6 +1,6 @@
 Install-WindowsFeature -Name UpdateServices -IncludeManagementTools
-New-Item -Path C: -Name WSUS -ItemType Directory
-& 'C:\Program Files\Update Services\Tools\WsusUtil.exe' postinstall CONTENT_DIR=C:\WSUS
+New-Item -Path D: -Name WSUS -ItemType Directory
+& 'C:\Program Files\Update Services\Tools\WsusUtil.exe' postinstall CONTENT_DIR=D:\WSUS
 
 $wsus = Get-WSUSServer
 Write-Verbose "Connect to WSUS server configuration" -Verbose
@@ -26,7 +26,7 @@ Write-Verbose "Sync is done" -Verbose
 
 
 Get-WsusProduct | Set-WsusProduct -Disable
-Get-WsusServer | Get-WsusProduct | Where-Object -FilterScript { $_.product.title -match "Windows Server 2019" } | Set-WsusProduct
+Get-WsusServer | Get-WsusProduct | Where-Object -FilterScript { $_.product.title -match "Windows 7" } | Set-WsusProduct
 Get-WsusServer | Get-WsusProduct | Where-Object -FilterScript { $_.product.title -in "Windows 10" } | Set-WsusProduct
 
 Get-WsusClassification | Where-Object {
