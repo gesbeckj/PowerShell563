@@ -1,0 +1,9 @@
+[ODBC]
+DRIVER=SQL Server Native Client 11.0
+UID=sqladmin@kogs355f9b
+Encrypt=Yes
+DATABASE=VetSDP
+WSID=IDEA-PC
+APP=Microsoft Office 2013
+SERVER=kogs355f9b.database.windows.net
+Description=GWAAR Veterans Self Directed Program Azure Database
